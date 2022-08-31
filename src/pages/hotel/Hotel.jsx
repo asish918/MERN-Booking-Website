@@ -4,31 +4,53 @@ import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
 import MailList from "../../components/mailList/MailList"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
+import { faCircleArrowLeft, faCircleArrowRight, faLocationDot, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
 
 const Hotel = () => {
 
+    const [sliderNumber, setSliderNumber] = useState(0)
+    const [openSlider, setOpenSlider] = useState(false)
+
+    const handleOpen = (i) => {
+        setSliderNumber(i);
+        setOpenSlider(true);
+    }
+
+    const handleMove = (direction) => {
+        let newSlideNumber;
+
+        if(direction==="l") {
+            newSlideNumber = sliderNumber === 0 ? 5 : sliderNumber - 1;
+        }
+        else {
+            newSlideNumber = sliderNumber === 5 ? 0 : sliderNumber + 1;
+        }
+
+        setSliderNumber(newSlideNumber)
+    }
+
     const Photos = [
         {
-            src: "https://picsum.photos/300/300"
+            src: "https://picsum.photos/id/1/300/300"
         },
         {
-            src: "https://picsum.photos/300/300"
+            src: "https://picsum.photos/id/2/300/300"
         },
         {
-            src: "https://picsum.photos/300/300"
+            src: "https://picsum.photos/id/3/300/300"
         },
         {
-            src: "https://picsum.photos/300/300"
+            src: "https://picsum.photos/id/4/300/300"
         },
         {
-            src: "https://picsum.photos/300/300"
+            src: "https://picsum.photos/id/5/300/300"
         },
         {
-            src: "https://picsum.photos/300/300"
+            src: "https://picsum.photos/id/6/300/300"
         },
         {
-            src: "https://picsum.photos/300/300"
+            src: "https://picsum.photos/id/7/300/300"
         },
     ]
 
@@ -37,7 +59,18 @@ const Hotel = () => {
             <Navbar />
             <Header type='list' />
 
+            {openSlider &&
+                <div className="slider">
+                    <FontAwesomeIcon onClick={() => setOpenSlider(false)} icon={faCircleXmark} className="close"/>
+                    <FontAwesomeIcon icon={faCircleArrowLeft} className="arrow" onClick={() => handleMove("l")} />
+                    <div className="sliderWrapper">
+                        <img src={Photos[sliderNumber].src} alt="" />
+                    </div>
+                    <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick={() => handleMove("r")}/>
+                </div>
+            }
             <div className="hotelContainer">
+
                 <div className="hotelWrapper">
                     <button className="bookNow">Reserve or Book Now!</button>
                     <h1 className="hotelTitle">Grand Hotel</h1>
@@ -52,9 +85,9 @@ const Hotel = () => {
                         Book a stay over $114 at this property and get a free airport taxi
                     </div>
                     <div className="hotelImages">
-                        {Photos.map(photo => (
+                        {Photos.map((photo, index) => (
                             <div className="hotelImgWrapper">
-                                <img src={photo.src} alt="" className="hotelImg" />
+                                <img src={photo.src} onClick={() => handleOpen(index)} alt="" className="hotelImg" />
                             </div>
                         ))}
                     </div>
@@ -79,7 +112,7 @@ const Hotel = () => {
                         <div className="hotelDetailsPrice">
                             <h1>Perfect for a 9-night stay!</h1>
                             <span>
-                                Located in the real heart of Krakow, this property has an 
+                                Located in the real heart of Krakow, this property has an
                                 excellent location score of 9.8!
                             </span>
                             <h2>
