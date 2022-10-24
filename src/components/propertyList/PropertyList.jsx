@@ -1,48 +1,34 @@
 import "./propertyList.css"
+import useFetch from '../../hooks/useFetch'
 
 const PropertyList = () => {
+    const { data, loading, error } = useFetch("http://localhost:8000/api/hotels/countByType");
+    const images = [
+        "https://picsum.photos/300/300",
+        "https://picsum.photos/300/300",
+        "https://picsum.photos/300/300",
+        "https://picsum.photos/300/300",
+        "https://picsum.photos/300/300",
+    ];
     return (
         <div className="pList">
-            <div className="pListItem">
-                <img src="https://picsum.photos/300/300" alt="" />
+            {loading ? ("loading") : (
+                <>
+                    {data && images.map((img, index) => (
 
-                <div className="pListTitles">
-                    <h1>Hotels</h1>
-                    <h2>233 hotels</h2>
-                </div>
-            </div>
-            <div className="pListItem">
-                <img src="https://picsum.photos/300/300" alt="" />
+                        <div className="pListItem" key={index}>
+                        <img src={img} alt="" />
 
-                <div className="pListTitles">
-                    <h1>Apartments</h1>
-                    <h2>233 apartments</h2>
-                </div>
-            </div>
-            <div className="pListItem">
-                <img src="https://picsum.photos/300/300" alt="" />
-
-                <div className="pListTitles">
-                    <h1>Resorts</h1>
-                    <h2>233 resorts</h2>
-                </div>
-            </div>
-            <div className="pListItem">
-                <img src="https://picsum.photos/300/300" alt="" />
-
-                <div className="pListTitles">
-                    <h1>Villas</h1>
-                    <h2>233 villas</h2>
-                </div>
-            </div>
-            <div className="pListItem">
-                <img src="https://picsum.photos/300/300" alt="" />
-
-                <div className="pListTitles">
-                    <h1>Villas</h1>
-                    <h2>233 villas</h2>
-                </div>
-            </div>
+                        <div className="pListTitles">
+                                <h1>{data[index]?.type}s</h1>
+                            <h2>{data[index]?.count} {data[index]?.type}s</h2>
+                        </div>
+                    </div>
+                    ))
+                    }
+                </>
+            )
+            }
         </div>
     )
 }
