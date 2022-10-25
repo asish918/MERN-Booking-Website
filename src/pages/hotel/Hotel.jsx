@@ -7,8 +7,10 @@ import useFetch from '../../hooks/useFetch'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleArrowLeft, faCircleArrowRight, faLocationDot, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { useContext, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SearchContext } from '../../context/SearchContext'
+import { AuthContext } from '../../context/AuthContext'
+import ReserveModal from '../../components/reserveModal/ReserveModal'
 
 const Hotel = () => {
 
@@ -16,11 +18,13 @@ const Hotel = () => {
     const id = location.pathname.split('/')[2];
     const [sliderNumber, setSliderNumber] = useState(0)
     const [openSlider, setOpenSlider] = useState(false)
+    const [openModal, setOpenModal] = useState(false)
 
     const { data, loading, error } = useFetch(`http://localhost:8000/api/hotels/find/${id}`)
 
     const { dates, options } = useContext(SearchContext)
-    console.log(dates);
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -35,6 +39,14 @@ const Hotel = () => {
     const handleOpen = (i) => {
         setSliderNumber(i);
         setOpenSlider(true);
+    }
+
+    const handleClick = () => {
+        if(user){
+            setOpenModal(true);
+        } else {
+            navigate("/login")
+        }
     }
 
     const handleMove = (direction) => {
@@ -94,7 +106,7 @@ const Hotel = () => {
                 <div className="hotelContainer">
 
                     <div className="hotelWrapper">
-                        <button className="bookNow">Reserve or Book Now!</button>
+                        <button onClick={handleClick} className="bookNow">Reserve or Book Now!</button>
                         <h1 className="hotelTitle">{data.name}</h1>
                         <div className="hotelAddress">
                             <FontAwesomeIcon icon={faLocationDot} />
@@ -136,6 +148,8 @@ const Hotel = () => {
                     </div>
                 </div>
             )}
+
+            {openModal && <ReserveModal setOpen={setOpenModal} hotelId={id} />}
 
             <MailList />
             <Footer />
