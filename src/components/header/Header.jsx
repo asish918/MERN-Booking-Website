@@ -10,6 +10,7 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { useNavigate } from 'react-router-dom';
 import { SearchContext } from '../../context/SearchContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const Header = ({ type }) => {
     const [openDate, setOpenDate] = useState(false)
@@ -21,6 +22,8 @@ const Header = ({ type }) => {
         children: 0,
         room: 1
     })
+
+    const { user } = useContext(AuthContext);
 
     const [dates, setDates] = useState([
         {
@@ -88,7 +91,7 @@ const Header = ({ type }) => {
                         <p className="headerDescription">
                             Get rewarded for your travels - unlock instant savings of 10% or more with a free Booking account
                         </p>
-                        <button className="headerBtn">Sign In / Register</button>
+                        {!user && <button className="headerBtn">Sign In / Register</button>}
 
                         <div className="headerSearch">
                             <div className="headerSearchItem">

@@ -30,7 +30,7 @@ const Hotel = () => {
         return diffDays;
     }
 
-    const days = dayDifference(dates[0].endDate.getTime() - dates[0].startDate.getTime());
+    const days = dayDifference(dates[0].endDate.getTime(), dates[0].startDate.getTime());
 
     const handleOpen = (i) => {
         setSliderNumber(i);
@@ -122,13 +122,13 @@ const Hotel = () => {
                                 </p>
                             </div>
                             <div className="hotelDetailsPrice">
-                                <h1>Perfect for a {9}-night stay!</h1>
+                                <h1>Perfect for a {days}-night stay!</h1>
                                 <span>
                                     Located in the real heart of Krakow, this property has an
                                     excellent location score of 9.8!
                                 </span>
                                 <h2>
-                                    <b>${9 * data.cheapestPrice * options.room}</b> ({9} nights)
+                                    <b>${days * data.cheapestPrice * options.room}</b> ({days} nights)
                                 </h2>
                                 <button>Reserve or Book Now!</button>
                             </div>
